@@ -135,7 +135,7 @@ const Produto = () => {
                 <strong>{item.nome}</strong>{item.descricao}
             </div>
             <div>
-                <button onClick={handleAlterar(item)}>Editar</button>
+                <button onClick={()=>handleAlterar(item)}>Editar</button>
                 <button onClick={()=>deletarProduto(item.id)}>Deletar</button>
             </div>
         </li>
