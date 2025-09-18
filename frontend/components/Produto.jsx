@@ -19,7 +19,7 @@ const Produto = () => {
         }
         // TRATAMENTO DE ERROS
         try{
-            const response = await axios.post(API_URL);
+            const response = await axios.post(API_URL, novoProduto);
             setProduto([...produto,response.data])
             setNovoProduto({nome:"", descricao:""})
             setEditar(false);
@@ -39,6 +39,7 @@ const Produto = () => {
     const consultarProdutos= async ()=>{
         try{
             const response = await axios.get(API_URL)
+            setProduto(response.data);
 
         }
         catch(error){
@@ -68,7 +69,7 @@ const Produto = () => {
 
     // DELETAR UM PRODUTO CADASTRADOS
 
-    const deletarProduto =async ()=>{
+    const deletarProduto =async (id)=>{
         if(window.confirm("Tem certeza que deseja deleta este produto")){
             try{
                 await axios.delete(`${API_URL}/${id}`);
