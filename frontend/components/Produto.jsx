@@ -98,11 +98,11 @@ const Produto = () => {
     }
 
   return (
-    <div>
-      <h1>Cadastro de Produto</h1>
-      <form>
+    <div className="max-w-4xl mx-auto p-6 bg-gray-600 rounded-lg">
+      <h1 className="text-3xl text-center mb-6 text-white">Cadastro de Produto</h1>
+      <form className="space-y-4">
         <div>
-          <label>Nome Produto</label>
+          <label className="block text-lg font-medium text-white">Nome Produto</label>
           <input 
            type="text"
            id="nome" 
@@ -110,33 +110,48 @@ const Produto = () => {
            value={novoProduto.nome} //pega a variavel do useState
             // pega o que o for digitado no campo    
            onChange={(e)=>setNovoProduto({...novoProduto, nome: e.target.value})}
+           className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
            
            />
         </div>
 
         <div>
-          <label>Descrição Produto</label>
+          <label className="block text-lg font-medium text-white">Descrição Produto</label>
           <input
             type="text"
             id="descricao"
             placeholder="Digite descrição Produto"
             value={novoProduto.descricao}
             onChange={(e)=>setNovoProduto({...novoProduto, descricao : e.target.value})}
+            className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
           />
         </div>
-            <button onClick={handleSubmit}>
+        <div className="flex justify-center text-white">
+            <button 
+            onClick={handleSubmit}
+            className="mt-4 px-6 py-2 bg-indigo-900 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 {editar ? "Alterar" : "Cadastrar"}
             </button>
+        </div>
       </form>
-      <ul>
+    <h2 className="text-2xl font-semibold mt-8 mb-4 text-white">Lista de Produtos</h2>
+      <ul className="space-y-4">
         {produto.map(item =>(
-        <li key={item.id}>
+        <li key={item.id} className="flex justify-between items-center bg-indigo-900 p-4 rounded-lg shadow-sm text-white">
             <div>
-                <strong>{item.nome}</strong>{item.descricao}
+                <strong className="text-xl">{item.nome}</strong>
+                <p className="text-shadow-white">{item.descricao}</p>
             </div>
-            <div>
-                <button onClick={()=>handleAlterar(item)}>Editar</button>
-                <button onClick={()=>deletarProduto(item.id)}>Deletar</button>
+            <div className="space-x-2">
+                <button 
+                onClick={()=>handleAlterar(item)}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+                        Editar
+                </button>
+                <button onClick={()=>deletarProduto(item.id)}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+                    Deletar
+                </button>
             </div>
         </li>
         ))}     
