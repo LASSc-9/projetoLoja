@@ -75,6 +75,7 @@ app.get("/produto/search", (req, res) => {
 
     const termoPesquisa = pesquisa.toLowerCase();
     const resultado = produtos.filter(item=>item.nome.toLowerCase().includes(termoPesquisa)| item.descricao.toLowerCase().includes(termoPesquisa))
+    res.json(resultado)
 })
 
 // ROTA PARA ALTERAR PRODUTO CADASTRADO

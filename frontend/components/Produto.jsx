@@ -9,6 +9,7 @@ const Produto = () => {
     const [produto, setProduto]=useState([]);
     const [novoProduto, setNovoProduto]=useState({nome:"",descricao:""});
     const [editar, setEditar]=useState(false);
+    const [pesquisar, setPesquisar]=useState("")
 
     // CADASTRAR PRODUTO
     const cadastrarProduto =async ()=>{
@@ -38,7 +39,8 @@ const Produto = () => {
     // CONSULTAR PRODUTOS CADASTRADOS
     const consultarProdutos= async ()=>{
         try{
-            const response = await axios.get(API_URL)
+            const url = pesquisar ? `${API_URL}/search?pesquisa=${pesquisar}`:API_URL
+            const response = await axios.get(url)
             setProduto(response.data);
 
         }
@@ -46,6 +48,13 @@ const Produto = () => {
             console.log("Erro ao consultar produto",error)
         }
     }
+
+    useEffect(()=>{
+        const timer = setTimeout(()=>{
+            consultarProdutos();
+        }, 300)
+        return ()=>clearTimeout(timer)
+    }, [pesquisar])
     
     // ALTERAR PRODUTO CADASTRADO
 
@@ -102,7 +111,7 @@ const Produto = () => {
       <h1 className="text-3xl text-center mb-6 text-white">Cadastro de Produto</h1>
       <form className="space-y-4">
         <div>
-            <input type="text" placeholder="Pesquisar" value={pesquisar} onChange={(e)=>setPesquisar(e.target.value)} className="w-[300px] pl-4 border rounded-b-full border-gray-300" />
+            <input type="text" placeholder="Pesquisar" value={pesquisar} onChange={(e)=>setPesquisar(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white bg-gray-800" />
         </div>
         <div>
           <label className="block text-lg font-medium text-white">Nome Produto</label>
