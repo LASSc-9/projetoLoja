@@ -4,6 +4,7 @@ const bodyParser= require("body-parser");// middleware que analisa o corpo da re
 const {v4:uuid} = require("uuid");//função responsavel por gerar ID´s unicos 
 const fs = require("fs") //MANIPULA ARQUIVOS
 const path = require("path"); //DEFINE CAMINHO DOS ARQUIVOS
+const { error } = require("console");
 
 
 // INSTANCIANDO O EXPRESS
@@ -64,6 +65,16 @@ app.post("/produto",(req,res)=>{
 // ROTA PARA CONSULTAR OS PRODUTOS CADASTRADOS (get)
 app.get("/produto",(req,res)=>{
     res.json(produtos)
+})
+
+app.get("/produto/search", (req, res) => {
+    const {pesquisa} = req.query;
+    if(!pesquisa){
+        return res.status(400).json({error: "pesquisa nao encontrada"})
+    }
+
+    const termoPesquisa = pesquisa.toLowerCase();
+    const resultado = produtos.filter(item=>item.nome.toLowerCase().includes(termoPesquisa)| item.descricao.toLowerCase().includes(termoPesquisa))
 })
 
 // ROTA PARA ALTERAR PRODUTO CADASTRADO
