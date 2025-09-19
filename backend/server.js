@@ -1,7 +1,11 @@
 const express = require("express");//importa o módulo express que contruir o servidior
 const cors = require("cors");//permite que acesse rotas diferentes(domínios)
-const bodyParser= require("body-parser")// middleware que analisa o corpo da requisição de entrada HTTP(dados que vem do formulario)
-const {v4:uuid} = require("uuid")//função responsavel por gerar ID´s unicos 
+const bodyParser= require("body-parser");// middleware que analisa o corpo da requisição de entrada HTTP(dados que vem do formulario)
+const {v4:uuid} = require("uuid");//função responsavel por gerar ID´s unicos 
+const fs = require("fs") //MANIPULA ARQUIVOS
+const path = require("path"); //DEFINE CAMINHO DOS ARQUIVOS
+
+
 // INSTANCIANDO O EXPRESS
 const app = express();
 // DEFINE A PORTA DO SERVIDOR
@@ -12,8 +16,31 @@ app.use(cors());
 // usando o body-parse para a requisição
 app.use(bodyParser.json());
 
-// VARIAVEL QUE RECEBE UM ARRAY VAZIO
-let produtos =[];
+//LOCAL DO ARQUIVO JSON
+const caminho = path.join(__dirname, "produtos.json")
+
+//FUNÇO PARA LER OS DADOS DO ARQUIVO
+const lerProdutos = ()=>{
+    try{
+        const data = fs.readFileSync(caminho, "utf-8")
+        return JSON.parse(data)
+    } catch(error){
+        console.error("erro ao ler o arquivo", error)
+    }
+}
+
+//FUNÇÃO PARA GRAVAR DADOS NO ARQUIVO
+const salvarProdutos=(data)=>{
+    try{
+        fs.writeFileSync(caminho, JSON.stringify(data, null, 2), "utf-8")
+    } catch(error){
+        console.error("erro ao salvar dados n o arquivo", error)
+    }
+}
+
+
+// VARIAVEL QUE RECEBE A FUNÇÃO LER PRODUTOS
+let produtos =lerProdutos();
 
 // CRIANDO A ROTA CADASTRAR PRODUTO (post)
 
@@ -28,6 +55,8 @@ app.post("/produto",(req,res)=>{
     const novoItem ={id:uuid(),nome,descricao}
     // pega o que foi cadastraro e coloca no array produtos
     produtos.push(novoItem);
+    //salva os dados no arquivo json
+    salvarProdutos(produtos);
     // retorna a mensagem de sucesso
     res.status(201).json({message:"Cadastrado Efetuado com sucesso"})
 })
@@ -51,6 +80,7 @@ app.put("/produto/:id", (req,res)=>{
         return res.status(404).json({error:"Produto não encontrado"})
     }
     produtos[produtoIndex]={id:produtoId,nome, descricao};
+    salvarProdutos(produtos)
     res.json(produtos[produtoIndex])
 
 })
@@ -69,6 +99,7 @@ app.delete("/produto/:id",(req,res)=>{
      if(produtos.length == inicioProduto){
         return res.status(404).json({error:"Produto não encontrado"})
     }
+    salvarProdutos(produtos)
     // mensagem afirmando que o produto foi removido
     res.status(404).send("Produto removido com sucesso")
 
