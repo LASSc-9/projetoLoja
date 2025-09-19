@@ -102,6 +102,9 @@ const Produto = () => {
       <h1 className="text-3xl text-center mb-6 text-white">Cadastro de Produto</h1>
       <form className="space-y-4">
         <div>
+            <input type="text" placeholder="Pesquisar" value={pesquisar} onChange={(e)=>setPesquisar(e.target.value)} className="w-[300px] pl-4 border rounded-b-full border-gray-300" />
+        </div>
+        <div>
           <label className="block text-lg font-medium text-white">Nome Produto</label>
           <input 
            type="text"
